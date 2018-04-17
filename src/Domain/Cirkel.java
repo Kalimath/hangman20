@@ -45,6 +45,6 @@ public class Cirkel {
 	
 	@Override
 	public String toString() {
-		return "Crikel met als straal " + radius + " en middelpunt " + middelPunt;
+		return "Crikel met als straal " + radius + " en middelpunt " + middelPunt.toString();
 	}
 }

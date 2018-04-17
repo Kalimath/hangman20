@@ -19,23 +19,25 @@ public class AllTest {
 	
 	private Cirkel test;
 	private int straal;
-	private int middelpunt;
+	private Punt middelPunt = new Punt;
 	
 	
 	@Before	
 	public void setUp() throws Exception {
-		Cirkel c = new Cirkel(9,6);
+		
 		straal = 3;
-		middelpunt = 6;
+		middelPunt =(6,100);
+		
+		Cirkel c = new Cirkel(middelPunt, straal);
 	}
 	
 	@Test
 	public void Cirkel_Aanmaken_Geldig_Middelpunt_straal() {
 		test = new Cirkel(6,3);
 		straal = test.getRadius();
-		middelpunt = 3;
+		middelPunt = 3;
 		assertEquals(this.straal,test.getRadius());
-		assertEquals(this.middelpunt, test.getMiddelPunt());
+		assertEquals(this.middelPunt, test.getMiddelPunt());
 	}
 	
 	@Test (expected = IllegalArgumentException)
@@ -55,7 +57,7 @@ public class AllTest {
 	
 	@Test
 	public void Twee_Cirkels_Gelijk_Dezelde_Straal_Middelpunt() {
-		Cirkel c1 = new Cirkel(straal, middelpunt);
+		Cirkel c1 = new Cirkel(straal, middelPunt);
 		assertEquals(c,c1);
 	}
 	
