@@ -3,8 +3,7 @@ package test;
 public class AllTest {
 	
 	import static org.junit.Assert.assertEquals;
-	import Domain.Cirkel;
-	import Domain.Speler;
+	import Domain.*;
 	import org.junit.runner.RunWith;
 	import org.junit.runners.Suite;
 	import org.junit.runners.Suite.SuiteClasses;
@@ -26,6 +25,8 @@ public class AllTest {
 	@Before	
 	public void setUp() throws Exception {
 		Cirkel c = new Cirkel(6);
+		straal = 3;
+		middelpunt = 6;
 	}
 	
 	@Test
@@ -44,8 +45,16 @@ public class AllTest {
 	
 	@Test (expected = IllegalArgumentException)
 	public void Cirkel_Gooit_Exception_Als_Straal_Kleiner_Nul() {
-		Crikel test = new Cirkel(-6);
+		test = new Cirkel(-6);
 	}
 	
-	@Test 
+	@Test (expected = IllegalArgumentException)
+	public void Cirkel_Gooit_Exception_Als_Straal_Gelijk_Aan_Nul() {
+		test = new Crikel(0);
+	}
+	
+	@Test
+	public void Twee_Cirkels_Gelijk_Dezelde_Straal_Middelpunt() {
+		Cirkel c1 = new Cirkel(straal, middelpunt);
+	}
 }
