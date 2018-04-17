@@ -2,10 +2,10 @@ package Domain;
 
 public class Cirkel {
 
-	private int middelPunt;
+	private Punt middelPunt;
 	private int radius;
 	
-	public Cirkel(Punt punt, int radius) {
+	public Cirkel(Punt middelpunt, int radius) {
 		setRadius(radius);
 		setMiddlePunt(middelPunt);
 	}
@@ -14,7 +14,7 @@ public class Cirkel {
 		this.middelPunt = middelPunt;
 	}
 	
-	public int getMiddelPunt() {
+	public Punt getMiddelPunt() {
 		return middelPunt;
 	}
 	
@@ -36,7 +36,7 @@ public class Cirkel {
 		if(o instanceof Cirkel) {
 			Cirkel c = (Cirkel) o;
 			
-			if(this.radius == c.getRadius() && this.middelPunt == c.getMiddelPunt()) {
+			if(this.radius == c.getRadius() && this.middelPunt.equals(c.getMiddelPunt())) {
 				result = true;
 			}
 		}
