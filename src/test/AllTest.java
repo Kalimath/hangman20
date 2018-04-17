@@ -1,14 +1,15 @@
 package test;
 
+import static org.junit.Assert.assertEquals;
+import Domain.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+import org.junit.Before;
+import org.junit.Test;
 public class AllTest {
 	
-	import static org.junit.Assert.assertEquals;
-	import Domain.*;
-	import org.junit.runner.RunWith;
-	import org.junit.runners.Suite;
-	import org.junit.runners.Suite.SuiteClasses;
-	import org.junit.Before;
-	import org.junit.Test;
+	
 
 
 	@RunWith(Suite.class)
@@ -19,45 +20,46 @@ public class AllTest {
 	
 	private Cirkel test;
 	private int straal;
-	private Punt middelPunt = new Punt;
+	private Punt middelPuntTest = new Punt(6,300);
+	private Punt middelPunt = new Punt(100,9);
+	private Cirkel c;
 	
 	
 	@Before	
 	public void setUp() throws Exception {
 		
 		straal = 3;
-		middelPunt =(6,100);
 		
-		Cirkel c = new Cirkel(middelPunt, straal);
+		c = new Cirkel(middelPunt, straal);
 	}
 	
 	@Test
 	public void Cirkel_Aanmaken_Geldig_Middelpunt_straal() {
-		test = new Cirkel(6,3);
+		test = new Cirkel(middelPuntTest,3);
 		straal = test.getRadius();
-		middelPunt = 3;
+		middelPunt = new Punt(5,432);
 		assertEquals(this.straal,test.getRadius());
 		assertEquals(this.middelPunt, test.getMiddelPunt());
 	}
 	
-	@Test (expected = IllegalArgumentException)
+	@Test (expected = IllegalArgumentException.class)
 	public void Cirkel_Gooit_Exception_Als_Middelpunt_is_Null() {
-		test = new Cirkel(null);
+		test = new Cirkel(null,straal);
 	}
 	
-	@Test (expected = IllegalArgumentException)
+	@Test (expected = IllegalArgumentException.class)
 	public void Cirkel_Gooit_Exception_Als_Straal_Kleiner_Nul() {
-		test = new Cirkel(-6);
+		test = new Cirkel(middelPunt,-6);
 	}
 	
-	@Test (expected = IllegalArgumentException)
+	@Test (expected = IllegalArgumentException.class)
 	public void Cirkel_Gooit_Exception_Als_Straal_Gelijk_Aan_Nul() {
-		test = new Crikel(0);
+		test = new Cirkel(middelPunt,0);
 	}
 	
 	@Test
 	public void Twee_Cirkels_Gelijk_Dezelde_Straal_Middelpunt() {
-		Cirkel c1 = new Cirkel(straal, middelPunt);
+		Cirkel c1 = new Cirkel(middelPunt, straal);
 		assertEquals(c,c1);
 	}
 	
