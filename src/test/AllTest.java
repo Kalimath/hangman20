@@ -24,7 +24,7 @@ public class AllTest {
 	
 	@Before	
 	public void setUp() throws Exception {
-		Cirkel c = new Cirkel(6);
+		Cirkel c = new Cirkel(9,6);
 		straal = 3;
 		middelpunt = 6;
 	}
@@ -56,5 +56,8 @@ public class AllTest {
 	@Test
 	public void Twee_Cirkels_Gelijk_Dezelde_Straal_Middelpunt() {
 		Cirkel c1 = new Cirkel(straal, middelpunt);
+		assertEquals(c,c1);
 	}
+	
+	
 }

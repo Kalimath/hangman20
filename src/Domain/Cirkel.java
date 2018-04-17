@@ -19,6 +19,9 @@ public class Cirkel {
 	}
 	
 	public void setRadius(int radius) {
+		if(radius <= 0) {
+			throw new IllegalArgumentException("Radius te klein");
+		}
 		this.radius = radius;
 	}
 	
@@ -30,7 +33,6 @@ public class Cirkel {
 	public boolean equals(Object o) {
 		
 		boolean result = false;
-		
 		if(o instanceof Cirkel) {
 			Cirkel c = (Cirkel) o;
 			
@@ -38,13 +40,11 @@ public class Cirkel {
 				result = true;
 			}
 		}
-		
 		return result;
-		
 	}
 	
 	@Override
 	public String toString() {
-		
+		return "Crikel met als straal " + radius + " en middelpunt " + middelPunt;
 	}
 }
