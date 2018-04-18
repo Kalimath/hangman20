@@ -6,7 +6,7 @@ public abstract class Vorm {
 	}
 	
 @Override	
-public void equals{
+public boolean equals{
 	
 }
 
