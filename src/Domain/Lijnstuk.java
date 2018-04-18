@@ -18,24 +18,27 @@ public class Lijnstuk {
 	}
 
 	public Punt getStartpunt() {
-		return startpunt;
+		return this.startpunt;
 	}
 
 	public Punt getEindpunt() {
-		return eindpunt;
+		return this.eindpunt;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
+		
 		boolean result = false;
-		if (o == null) return false;
-	    if (o == this) return true;
-	    if (!(o instanceof Lijnstuk))return false;
-	    Lijnstuk ob = (Lijnstuk)o;
-	    
-	    if(ob.getEindpunt().equals(this.getEindpunt())&&ob.getStartpunt().equals(this.getStartpunt())) {
-	    	result=true;
+		if(o==null) return result;
+	    if (o instanceof Lijnstuk) {
+	    	Lijnstuk ob = (Lijnstuk)o;
+		    
+		    if(this.getEindpunt().equals(ob.getEindpunt())
+		    	&&this.getStartpunt().equals(ob.getStartpunt())) {
+		    	result=true;
+		    }
 	    }
+	    
 		return result;
 	}
 	
