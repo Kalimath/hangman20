@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import Domain.Cirkel;
+
 public class TekeningTest {
 	private Vorm gebouw;
 	private Vorm dak;
