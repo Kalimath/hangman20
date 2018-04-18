@@ -12,11 +12,8 @@ public Speler(String naam) {
 }
 
 private void setNaam(String naam) {
-	if(naam==null) {
+	if(naam==null || naam.trim().isEmpty()) {
 		throw new DomainException();
-//		JOptionPane.showMessageDialog(null, "Naam is leeg", "Error", JOptionPane.ERROR_MESSAGE);
-//		String newnaam = JOptionPane.showInputDialog(null, "Geef een geldige naam");
-		//this.setNaam(newnaam);
 	}
 	this.naam = naam;
 }
