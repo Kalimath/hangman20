@@ -40,6 +40,10 @@ public class Rechthoek {
 	public Punt getLinkerBovenhoek() {
 		return linkerBovenHoek;
 	}
+	
+	public Rechthoek getOmhullende() {
+		
+	}
 
 	@Override
 	public boolean equals(Object o) {
