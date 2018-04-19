@@ -1,23 +1,5 @@
+package domain;
 
-public abstract class Vorm {
-	
-	private Punt punt;
-	
-	public Vorm() {
-		
-	}
-	
-
-	@Override	
-	public boolean equals{
-
-	
-	}
-
-	@Override
-	public String toString() {
-	
-	}
-
-
+public abstract class Vorm implements Drawable{
+	public abstract Omhullende getOmhullende();
 }

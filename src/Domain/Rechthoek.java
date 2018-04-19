@@ -1,14 +1,54 @@
-package Domain;
+package domain;
 
-public class Rechthoek {
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+public class Rechthoek extends Vorm implements Drawable {
 	private int breedte;
 	private int hoogte;
-	private Punt linkerBovenHoek;
+	private Punt linkerBovenhoek;
 
-	public Rechthoek(Punt linkerBovenHoek, int breedte, int hoogte) {
+	public Rechthoek(Punt linkerbovenhoek, int breedte, int hoogte) {
 		setBreedte(breedte);
 		setHoogte(hoogte);
-		setLinkerBovenHoek(linkerBovenHoek);
+		setLinkerBovenhoek(linkerbovenhoek);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		boolean gelijk = false;
+		if (o instanceof Rechthoek) {
+			Rechthoek rechthoek = (Rechthoek) o;
+			if (this.getBreedte() == rechthoek.getBreedte() && this.getHoogte() == rechthoek.getHoogte()
+					&& this.getLinkerBovenhoek() == rechthoek.getLinkerBovenhoek()) {
+				gelijk = true;
+			}
+		}
+		return gelijk;
+	}
+
+	@Override
+	public String toString() {
+		return "Rechthoek: positie: " + getLinkerBovenhoek().toString() + " - breedte: " + getBreedte() + " - hoogte: "
+				+ getHoogte() + " - " + getOmhullende().toString();
+	}
+
+	@Override
+	public Omhullende getOmhullende() {
+		Omhullende omhullende = new Omhullende(getLinkerBovenhoek(), getBreedte(), getHoogte());
+		return omhullende;
+	}
+
+	public Punt getLinkerBovenhoek() {
+		return linkerBovenhoek;
+	}
+
+	public void setLinkerBovenhoek(Punt hoek) {
+		if (hoek == null) {
+			throw new DomainException("hoek mag niet null zijn");
+		}
+		this.linkerBovenhoek = hoek;
 	}
 
 	public int getBreedte() {
@@ -16,9 +56,11 @@ public class Rechthoek {
 	}
 
 	public void setBreedte(int breedte) {
-		if (breedte <= 0)
-			throw new DomainException("breedte moet groter dan 0 zijn");
+		if (breedte <= 0) {
+			throw new DomainException("breedte mag niet kleiner dan 0 zijn");
+		}
 		this.breedte = breedte;
+
 	}
 
 	public int getHoogte() {
@@ -26,42 +68,18 @@ public class Rechthoek {
 	}
 
 	public void setHoogte(int hoogte) {
-		if (hoogte <= 0)
-			throw new DomainException("hoogte moet groter dan 0 zijn");
+		if (hoogte <= 0) {
+			throw new DomainException("hoogte mag niet kleiner dan 0 zijn");
+		}
 		this.hoogte = hoogte;
 	}
 
-	public void setLinkerBovenHoek(Punt linkerBovenHoek) {
-		if (linkerBovenHoek == null)
-			throw new DomainException("De positie mag niet leeg zijn.");
-		this.linkerBovenHoek = linkerBovenHoek;
-	}
-
-	public Punt getLinkerBovenhoek() {
-		return linkerBovenHoek;
-	}
-	
-	public Rechthoek getOmhullende() {
-		
-	}
-
 	@Override
-	public boolean equals(Object o) {
-		boolean result = false;
-		if (o == null)
-			return false;
-		if (getClass() != o.getClass())
-			result = false;
-
-		else {
-			Rechthoek r = (Rechthoek) o;
-			if (r.getLinkerBovenhoek().equals(this.getLinkerBovenhoek())
-				&& r.getBreedte() == this.getBreedte()
-					&& r.getHoogte() == this.getHoogte()) {
-						result = true;
-			}
-		}
-		return result;
+	public void teken(Graphics graphics) {
+		
+		graphics.drawRect(this.getLinkerBovenhoek().getX(), this
+				.getLinkerBovenhoek().getY(), this.getBreedte(), this
+				.getHoogte());
 	}
 
 }

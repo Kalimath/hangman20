@@ -1,50 +1,69 @@
-package Domain;
+package domain;
 
-public class Cirkel {
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-	private Punt middelPunt;
+public class Cirkel extends Vorm implements Drawable{
 	private int radius;
-	
+	private Punt middelpunt;
+
 	public Cirkel(Punt middelpunt, int radius) {
+		setMiddelpunt(middelpunt);
 		setRadius(radius);
-		setMiddlePunt(middelPunt);
 	}
-	
-	public void setMiddlePunt(Punt middelPunt) {
-		this.middelPunt = middelPunt;
+
+	public void setMiddelpunt(Punt middelpunt) {
+		if (middelpunt == null)
+			throw new DomainException("Middelpunt mag niet leeg zijn.");
+		this.middelpunt = middelpunt;
 	}
-	
-	public Punt getMiddelPunt() {
-		return middelPunt;
-	}
-	
-	public void setRadius(int radius) {
-		if(radius <= 0) {
-			throw new IllegalArgumentException("Radius te klein");
-		}
+
+	private void setRadius(int radius) {
+		if (radius <= 0)
+			throw new DomainException("Radius moet groter dan 0 zijn.");
 		this.radius = radius;
 	}
-	
+
+	public Punt getMiddelpunt() {
+		return this.middelpunt;
+	}
+
 	public int getRadius() {
 		return this.radius;
 	}
-	
+
 	@Override
-	public boolean equals(Object o) {
-		
-		boolean result = false;
-		if(o instanceof Cirkel) {
-			Cirkel c = (Cirkel) o;
-			
-			if(this.radius == c.getRadius() && this.middelPunt.equals(c.getMiddelPunt())) {
-				result = true;
-			}
-		}
-		return result;
+	public boolean equals(Object object) {
+		if (object == null)
+			return false;
+		if (!(object instanceof Cirkel))
+			return false;
+		Cirkel cirkel = (Cirkel) object;
+		return this.radius == cirkel.getRadius() && this.getMiddelpunt() == cirkel.getMiddelpunt();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Crikel met als straal " + radius + " en middelpunt " + middelPunt.toString();
+		return "Cirkel: middelpunt: " + getMiddelpunt().toString() + " - straal: " + radius + " - "
+				+ getOmhullende().toString();
 	}
+
+	@Override
+	public Omhullende getOmhullende() {
+		int minX = middelpunt.getX() - radius;
+		int minY = middelpunt.getY() - radius;
+		int breedte = radius * 2;
+		int hoogte = radius * 2;
+		Omhullende omhullende = new Omhullende(new Punt(minX, minY), breedte, hoogte);
+		return omhullende;
+	}
+	
+	@Override
+	public void teken(Graphics graphics) {
+
+		graphics.drawOval(this.getOmhullende().getMinX(), this.getOmhullende().getMinY(), this.radius, this.radius);
+		
+	}
+
 }
