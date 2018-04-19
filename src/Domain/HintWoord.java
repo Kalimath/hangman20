@@ -3,58 +3,76 @@ package domain;
 import java.util.ArrayList;
 
 public class HintWoord {
-	ArrayList<HintLetter> letters = new ArrayList<>();
 
-	public HintWoord(String woord) {
-		if (woord == null || woord.isEmpty()) {
-			throw new DomainException("Woord mag niet leeg zijn.");
-		}
-		for (int i = 0; i < woord.length(); i++) {
-			this.letters.add(new HintLetter(woord.charAt(i)));
-			System.out.println(woord.charAt(i));
-		}
+	private String woord;
+	private String geradenwoord = "";
+	private ArrayList<HintLetter> letters = new ArrayList<>();
 
+	public HintWoord(String pwoord) {
+	    HintLetter hintLetter;
+        setWoord(pwoord);
+		for (char letter: pwoord.toCharArray()) {
+		    hintLetter = new HintLetter(letter);
+		    if(!letters.contains(hintLetter) && letter != ' ') letters.add(hintLetter);
+		}
+		//TODO Hint woord aan begin spel;
+        System.out.println(getWoord());
 	}
 
 	public String getWoord() {
-		return this.toString();
+		return woord;
+	}
+
+	private void setWoord(String woord) {
+		if (woord == null || woord.isEmpty()) {
+			throw new DomainException("Woord is ongeldig");
+		}
+		this.woord = woord;
+
+	}
+	
+	public String getHint(){
+	    geradenwoord = "";
+        char[] letters = getWoord().toCharArray();
+        for (int i = 0; i < letters.length; i++) {
+            if (i == 0) {
+                int index = this.letters.indexOf(new HintLetter(letters[i]));
+                if(this.letters.get(index).isGeraden()) geradenwoord += letters[i];
+                else geradenwoord += "_";
+            } else if (letters[i] == ' ') {
+                geradenwoord += "  ";
+            }else if (letters[i] == '-') {
+                geradenwoord += " -";
+            } else {
+                int index = this.letters.indexOf(new HintLetter(letters[i]));
+                if(this.letters.get(index).isGeraden()) geradenwoord += " "+letters[i];
+                else geradenwoord += " _";
+            }
+
+        }
+		return geradenwoord;
+	}
+
+	public boolean raad(char letter) {
+		letter = Character.toLowerCase(letter);
+        for (HintLetter hintLetter: letters) {
+            if(hintLetter.isGeraden() && hintLetter.equals(new HintLetter(letter))) return false;
+            if(hintLetter.raad(letter)){
+            	
+                return true;
+            }
+        }
+        return false;
 	}
 
 	public boolean isGeraden() {
-		for (HintLetter hintLetter : letters) {
-			if (!hintLetter.isGeraden()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public boolean raad(char c) {
-		boolean letterGevonden = false;
-		for (HintLetter hintLetter : letters) {
-			if (hintLetter.raad(c)) {
-				letterGevonden = true;
-			}
-		}
-		if (letterGevonden) {
-			return true;
-		}
-		return false;
+		
+	    return !getHint().contains("_");
 	}
 
 	@Override
 	public String toString() {
-		String voorstellingVoorSpeler = "";
-		for (HintLetter hintLetter : letters) {
-			if (hintLetter.equals(" ")) {
-				voorstellingVoorSpeler += "  ";
-			} else if (!hintLetter.isGeraden()) {
-				voorstellingVoorSpeler += " _";
-			} else {
-				voorstellingVoorSpeler += " " + hintLetter.getLetter();
-			}
-		}
-		return voorstellingVoorSpeler;
+		return getHint();
 	}
 
 }

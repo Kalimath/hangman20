@@ -1,69 +1,70 @@
 package domain;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
-public class Cirkel extends Vorm implements Drawable{
-	private int radius;
-	private Punt middelpunt;
-
-	public Cirkel(Punt middelpunt, int radius) {
+public class Cirkel extends Vorm {
+	
+	int radius;
+	Punt middelpunt;
+	
+	public Cirkel(Punt middelpunt, int radius){
 		setMiddelpunt(middelpunt);
 		setRadius(radius);
+		
 	}
-
-	public void setMiddelpunt(Punt middelpunt) {
-		if (middelpunt == null)
-			throw new DomainException("Middelpunt mag niet leeg zijn.");
-		this.middelpunt = middelpunt;
+	
+	public int getRadius() {
+		return radius;
 	}
-
+	
 	private void setRadius(int radius) {
-		if (radius <= 0)
-			throw new DomainException("Radius moet groter dan 0 zijn.");
+		if(radius <= 0){throw new DomainException("ongeldige radius!");}
 		this.radius = radius;
 	}
-
+	
 	public Punt getMiddelpunt() {
-		return this.middelpunt;
+		return middelpunt;
 	}
-
-	public int getRadius() {
-		return this.radius;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (object == null)
-			return false;
-		if (!(object instanceof Cirkel))
-			return false;
-		Cirkel cirkel = (Cirkel) object;
-		return this.radius == cirkel.getRadius() && this.getMiddelpunt() == cirkel.getMiddelpunt();
-	}
-
-	@Override
-	public String toString() {
-		return "Cirkel: middelpunt: " + getMiddelpunt().toString() + " - straal: " + radius + " - "
-				+ getOmhullende().toString();
-	}
-
-	@Override
-	public Omhullende getOmhullende() {
-		int minX = middelpunt.getX() - radius;
-		int minY = middelpunt.getY() - radius;
-		int breedte = radius * 2;
-		int hoogte = radius * 2;
-		Omhullende omhullende = new Omhullende(new Punt(minX, minY), breedte, hoogte);
-		return omhullende;
+	
+	public void setMiddelpunt(Punt middelpunt) {
+		if(middelpunt == null){throw new DomainException("ongeldig middelpunt!");}
+		this.middelpunt = middelpunt;
 	}
 	
 	@Override
-	public void teken(Graphics graphics) {
-
-		graphics.drawOval(this.getOmhullende().getMinX(), this.getOmhullende().getMinY(), this.radius, this.radius);
-		
+	
+	public boolean equals(Object o){
+		if(o instanceof Cirkel){
+			Cirkel cirkel = (Cirkel)o;
+			
+			if(cirkel.getMiddelpunt() == this.middelpunt && cirkel.getRadius() == this.radius){
+				return true;
+			}
+			
+			
+		}
+		return false;
 	}
 
+    @Override
+    public Omhullende getOmhullende() {
+        Punt punt = new Punt(this.getMiddelpunt().getX()-this.getRadius(), this.getMiddelpunt().getY()-this.getRadius());
+        int diameter = this.getRadius()*2;
+        return new Omhullende(punt, diameter, diameter);
+    }
+
+    @Override
+	public String toString() {
+		return "Cirkel : middelPunt: " +middelpunt.toString() + " - straal: " + radius ;
+	}
+	public void teken(Graphics graphics){
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.setStroke(new BasicStroke(5));
+		graphics.drawOval(getOmhullende().getMinX(), getOmhullende().getMinY(), getOmhullende()
+				.getBreedte(), getOmhullende().getHoogte());
+	}
+	
+	
+	
+	
 }

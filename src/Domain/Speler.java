@@ -1,49 +1,48 @@
 package domain;
 
 public class Speler {
+	
 	private String naam;
-	private int score;
-
-	public Speler(String naam) {
-		super();
-		setNaam(naam);
+	private int score = 0;
+	
+	public Speler(String naam){
+		this.setNaam(naam);
 	}
-
-	public String getNaam() {
-		return naam;
+	
+	public String getNaam(){
+		return this.naam;
 	}
-
-	public void setNaam(String naam) {
-		if (naam == null || naam.isEmpty()){
-			throw new DomainException("Naam mag niet null zijn.");
+	
+	public int getScore(){
+		return this.score;
+	}
+	
+	private void setNaam(String naam) throws DomainException {
+		if(naam==null||naam.trim().isEmpty()){
+			throw new DomainException("BOOS, Naam moet letters bevatten");
 		}
 		this.naam = naam;
 	}
-
-	public int getScore() {
-		return score;
+	
+	public void addToScore(int score) throws DomainException{
+		if(this.score+score<0){
+			throw new DomainException("BOOS, niet negatief!");
+		}
+		this.score = this.score + score;
 	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public void addToScore(int positiveScore) {
-		if (positiveScore < 0 && positiveScore + getScore() < 0 ){
-			throw new DomainException("Totale score mag niet negatief zijn.");
-		}			
-		setScore(getScore() + positiveScore);
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		Speler speler = (Speler) object;
-		if (speler == null) {
-			return false;
-		} else if (speler.getNaam().equals(this.getNaam()) && speler.getScore() == this.getScore()) {
-			return true;
+	
+	public boolean equals(Object object){
+		if (object instanceof Speler){
+	     Speler nieuw = (Speler) object;
+	     if (nieuw.getNaam().equals(this.getNaam())&&nieuw.getScore()==this.score){
+	    	 return true;
+	     }
 		}
 		return false;
+	}
+	
+	public String toString(){
+		return this.naam + " heeft als score " + this.score;
 	}
 
 }

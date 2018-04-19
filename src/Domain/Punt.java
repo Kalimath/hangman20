@@ -1,15 +1,14 @@
 package domain;
 
-import java.awt.Graphics;
-
-public class Punt extends Vorm{
+public class Punt {
+	
 	private int x;
 	private int y;
-
-	public Punt(int x, int y) {
-		super();
-		setX(x);
-		setY(y);
+	
+	public Punt(int x, int y){
+		
+		this.setX(x);
+		this.setY(y);
 	}
 
 	public int getX() {
@@ -27,33 +26,17 @@ public class Punt extends Vorm{
 	private void setY(int y) {
 		this.y = y;
 	}
-
-	@Override
-	public boolean equals(Object object) {
+	
+	public boolean equals(Object object){
+		if(!(object instanceof Punt)) return false;
 		Punt punt = (Punt) object;
-		if (punt == null) {
-			return false;
-		} else if (punt.getX() == this.getX() && punt.getY() == this.getY()) {
-			return true;
-		}
+		if(this.getX() == punt.getX() && this.getY() == punt.getY()) return true;
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return "(" + this.getX() + ", " + this.getY() + ")";
+		return "(" + x + ", " + y + ")";
 	}
-
-	@Override
-	public void teken(Graphics graphics) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Omhullende getOmhullende() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

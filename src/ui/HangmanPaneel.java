@@ -1,15 +1,16 @@
 package ui;
 
 import java.awt.BorderLayout;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import db.WoordenLezer;
 import domain.HangMan;
+import domain.WoordenLijst;
+
 
 public class HangmanPaneel extends JPanel {
 
@@ -20,6 +21,7 @@ public class HangmanPaneel extends JPanel {
 	
 	private TekenVenster tekenVenster;
 	private HangMan spel;
+	private GameHoofdScherm hoofdScherm;
 	
 	public HangmanPaneel(HangMan spel){
 		super();
@@ -52,20 +54,32 @@ public class HangmanPaneel extends JPanel {
 				char guess = '\u0000';
 				if(input.length() > 0){
 					guess = input.charAt(0);
+					if(!spel.raad(guess));
 				}
-				//TODO raad
-
 				woord.setText(getSpel().getHint());
 				letter.setText("");
 				getTekenVenster().teken();
-				
-				//TODO
-				//toon boodschap als gewonnen of verloren en vraag of speler opnieuw wilt spelen
-				//als de speler opnieuw wilt spelen: herzet het spel en het paneel
-				//anders stop (System.exit(0))
+
+                if(spel.isGewonnen()){
+                    quitDialog("You won\n");
+                }else if(spel.isGameOver()){
+                    quitDialog("You lost\n");
+                }
 			}
 		}
-
+		public void quitDialog(String boodschap){
+            if(JOptionPane.showConfirmDialog(null, boodschap+="Want to play again?") == 0){
+                WoordenLijst woordenLijst = new WoordenLezer("woordenlijst.txt").lees();
+                HangMan spel = new HangMan(getSpel().getSpeler(), woordenLijst);
+                HangmanPaneel paneel = new HangmanPaneel(spel);
+                HangManHoofdScherm hoofdScherm = new HangManHoofdScherm(spel, paneel);
+                getHoofdScherm().setVisible(false);
+                getHoofdScherm().dispose();
+                hoofdScherm.start();
+            }else{
+                System.exit(0);
+            }
+		}
 		@Override
 		public void keyReleased(KeyEvent arg0) {/* Niet nodig*/}
 		@Override
@@ -90,4 +104,12 @@ public class HangmanPaneel extends JPanel {
 
 		reset();
 	}
+
+    public GameHoofdScherm getHoofdScherm() {
+        return hoofdScherm;
+    }
+
+    public void setHoofdScherm(GameHoofdScherm hoofdScherm) {
+        this.hoofdScherm = hoofdScherm;
+    }
 }

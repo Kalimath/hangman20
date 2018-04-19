@@ -1,102 +1,73 @@
 package domain;
 
-import java.awt.Graphics;
-import java.util.ArrayList;
+import java.awt.*;
 
-public class Driehoek extends Vorm implements Drawable {
-	private Punt punt1;
-	private Punt punt2;
-	private Punt punt3;
+public class Driehoek extends Vorm{
+	
+	private Punt hoekpunt1;
+	private Punt hoekpunt2;
+	private Punt hoekpunt3;
 
 	public Driehoek(Punt punt1, Punt punt2, Punt punt3) {
-		setHoekpunten(punt1, punt2, punt3);
+		this.setHoekPunten(punt1, punt2, punt3);
 	}
-
-	public void setHoekpunten(Punt punt1, Punt punt2, Punt punt3) {
-		if(punt1.equals(punt2) || punt1.equals(punt3) || punt2.equals(punt3)) throw new DomainException("Punten mogen niet samenvallen.");
-		if(((punt2.getX()-punt1.getX())*(punt3.getY()-punt1.getY()))==((punt3.getX()-punt1.getX())*(punt2.getY()-punt1.getY()))) throw new DomainException("");
-		if (punt1 == null || punt2 == null || punt3 == null)
-			throw new DomainException("De 3 punten mogen niet leeg zijn.");
-		this.punt1 = punt1;
-		this.punt2 = punt2;
-		this.punt3 = punt3;
+	
+	public void setHoekPunten(Punt punt1, Punt punt2, Punt punt3) throws DomainException {
+		if (punt1==null || punt2==null || punt3==null){
+			throw new DomainException("Hoeken mogen niet null zijn");
+		}
+		if (punt1.equals(punt2)||punt1.equals(punt3)||punt2.equals(punt3)){
+			throw new DomainException("Hoeken mogen niet gelijk zijn");
+		}
+		if(opZelfdeLijn(punt1, punt2, punt3)){
+			throw new DomainException("Hoeken op zelfde lijn");
+		}
+		this.hoekpunt1=punt1;
+		this.hoekpunt2=punt2;
+		this.hoekpunt3=punt3;
 	}
 
 	public Punt getHoekPunt1() {
-		return this.punt1;
+		return hoekpunt1;
 	}
 
 	public Punt getHoekPunt2() {
-		return this.punt2;
+		return hoekpunt2;
 	}
 
 	public Punt getHoekPunt3() {
-		return this.punt3;
+		return hoekpunt3;
 	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (object == null)
-			return false;
-		if (!(object instanceof Driehoek))
-			return false;
-		Driehoek driehoek = (Driehoek) object;
-		ArrayList<Punt> punten = new ArrayList<Punt>();
-		punten.add(getHoekPunt1());
-		punten.add(getHoekPunt2());
-		punten.add(getHoekPunt3());
-		return punten.contains(driehoek.getHoekPunt1()) && punten.contains(driehoek.getHoekPunt2())
-				&& punten.contains(driehoek.getHoekPunt3());
-	}
-
-	@Override
-	public String toString() {
-		return "Driehoek: hoekpunt1: " + punt1.toString() + " - hoekpunt2: " + punt2.toString() + " - hoekpunt3: "
-				+ punt3.toString() + " - " + getOmhullende().toString();
+	
+	public boolean equals (Object object){
+	if(!(object instanceof Driehoek)) return false;
+	Driehoek driehoek = (Driehoek) object;
+	if(this.getHoekPunt1() == driehoek.getHoekPunt1() && this.getHoekPunt2() == driehoek.getHoekPunt2() && this.getHoekPunt3()==driehoek.getHoekPunt3()) return true;
+	return false;
 	}
 
 	@Override
 	public Omhullende getOmhullende() {
-		int minY = minimum(punt1.getY(), punt2.getY(), punt3.getY());
-		int minX = minimum(punt1.getX(), punt2.getX(), punt3.getX());
-		int maxY = maximum(punt1.getY(), punt2.getY(), punt3.getY());
-		int maxX = maximum(punt1.getX(), punt2.getX(), punt3.getX());
-		int breedte = maxX - minX;
-		int hoogte = maxY - minY;
-		Omhullende omhullende = new Omhullende(new Punt(minX, minY), breedte, hoogte);
-		return omhullende;
-
+		int xmin = Math.min(Math.min(getHoekPunt1().getX(), getHoekPunt2().getX()), getHoekPunt3().getX());
+		int ymin = Math.min(Math.min(getHoekPunt1().getY(), getHoekPunt2().getY()), getHoekPunt3().getY());
+		int xmax = Math.max(Math.max(getHoekPunt1().getX(), getHoekPunt2().getX()), getHoekPunt3().getX());
+		int ymax = Math.max(Math.max(getHoekPunt1().getY(), getHoekPunt2().getY()), getHoekPunt3().getY());
+		return new Omhullende(new Punt(xmin, ymin), xmax-xmin, ymax-ymin);
 	}
 
-	private int minimum(int waarde1, int waarde2, int waarde3) {
-		int min = waarde1;
-		if (waarde2 < min) {
-			min = waarde2;
-		}
-		if (waarde3 < min) {
-			min = waarde3;
-		}
-		return min;
-	}
-
-	private int maximum(int waarde1, int waarde2, int waarde3) {
-		int max = waarde1;
-		if (waarde2 > max) {
-			max = waarde2;
-		}
-		if (waarde3 > max) {
-			max = waarde3;
-		}
-		return max;
+	@Override
+	public String toString() {
+		return "Driehoek: hoekpunt1: "+this.getHoekPunt1().toString()+" - hoekpunt2: "+this.getHoekPunt2().toString()+" - hoekpunt3: "+this.getHoekPunt3();
 	}
 	
-	@Override
-	public void teken(Graphics graphics) {
-		
-		int[] xPoints = { this.getHoekPunt1().getX(), this.getHoekPunt2().getX(),
-				this.getHoekPunt3().getX() };
-		int[] yPoints = { this.getHoekPunt1().getY(), this.getHoekPunt2().getY(),
-				this.getHoekPunt3().getY() };
+	private boolean opZelfdeLijn(Punt punt1, Punt punt2, Punt punt3){
+		return (punt2.getX()-punt1.getX())*(punt3.getY()-punt1.getY())==((punt3.getX()-punt1.getX())*(punt2.getY()-punt1.getY()));
+	}
+	public void teken(Graphics graphics){
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setStroke(new BasicStroke(5));
+		int[] xPoints = { getHoekPunt1().getX(), getHoekPunt2().getX(), getHoekPunt3().getX() };
+		int[] yPoints = { getHoekPunt1().getY(), getHoekPunt2().getY(), getHoekPunt3().getY() };
 		graphics.drawPolygon(xPoints, yPoints, 3);
 	}
 

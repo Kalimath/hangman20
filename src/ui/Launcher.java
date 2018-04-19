@@ -1,41 +1,42 @@
 package ui;
 
-import java.io.FileNotFoundException;
-
 import javax.swing.JOptionPane;
 
 import db.WoordenLezer;
-import domain.Speler;
+import domain.*;
+import domain.DomainException;
 
 public class Launcher {
 
 	public static void main(String[] args) {
-		Speler speler = new Speler(vraagNaam());
-		WoordenLezer woordenlezer;
-		try {
-			woordenlezer = new WoordenLezer();
-		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(null, "Woorden.txt not found.");
-			return;
-		}
-		HangManUi ui = new HangManUi(woordenlezer.getWoorden());
 
-		PictionaryUi ui2 = new PictionaryUi(speler);
-		ui2.showMenu();
-		ui2.toonTekening();
+	    hangman();
+		
 	}
-	
-	public static String vraagNaam(){
-		String naam;
-		while(true){
-			naam = JOptionPane.showInputDialog("Naam:");
-			if(naam.trim().equals("")){
-				JOptionPane.showMessageDialog(null, "Naam mag niet leeg zijn.");
-				continue;
-			}
-			break;
-		}
-		return naam;
-	}
+
+    /*private static void launch(){
+        GameHoofdScherm hoofdScherm = new GameHoofdScherm(getSpeler().getNaam(), new Tekening("hoofdscherm"));
+        hoofdScherm.teken();
+    }*/
+	private static void hangman(){
+        try{
+            WoordenLijst woordenLijst = new WoordenLezer("woordenlijst.txt").lees();
+            HangMan spel = new HangMan(getSpeler(), woordenLijst);
+            HangmanPaneel paneel = new HangmanPaneel(spel);
+            HangManHoofdScherm hoofdScherm = new HangManHoofdScherm(spel, paneel);
+            hoofdScherm.start();
+        }catch (DomainException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    private static Speler getSpeler(){
+        String naam = JOptionPane.showInputDialog("Welkom! \nHoe heet je?");
+        Speler speler = new Speler(naam);
+
+        JOptionPane.showMessageDialog(null, speler.getNaam() + " zal binnekort spelen", speler.getNaam(), JOptionPane.INFORMATION_MESSAGE);
+        return speler;
+    }
+
+
 
 }

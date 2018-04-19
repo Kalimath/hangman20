@@ -1,44 +1,41 @@
 package domain;
 
 public class HintLetter {
-	private char letter;
-	private boolean geraden;
+    private char letter;
+    private boolean geraden;
+    public HintLetter(char letter) {
+    	this.letter = Character.toLowerCase(letter);
+    }
 
-	public HintLetter(char c) {
-		this.letter = c;
-		geraden = false;
-	}
+    public boolean isGeraden() {
+        return geraden;
+    }
 
-	public boolean raad(char c) {
-		Character geradenChar = (Character) c;
-		if (geraden){
-			return false;
-		}
-		if (geradenChar.equals(getLetter())) {
-			this.geraden = true;
-			return true;
-		} else if (geradenChar.equals(Character.toLowerCase(getLetter()))
-				|| geradenChar.equals(Character.toUpperCase(getLetter()))) {
-			this.geraden = true;
-			return true;
-		}
-		return false;
-	}
+    public boolean raad(char x) {
+    	x = Character.toLowerCase(x);
+    	
+    	if(geraden) return false;
+    	if(letter == x){
+    		geraden = true;
+    		return true;
+    	}
+    	
+        return false;
+    }
 
-	public char toChar() {
-		if (isGeraden()) {
-			return letter;
-		} else {
-			return '_';
-		}
-	}
+    public char toChar() {
+    	if(isGeraden())return letter;
+        return '_';
+    }
 
-	public char getLetter() {
-		return this.letter;
-	}
+    public char getLetter() {
+        return letter;
+    }
 
-	public boolean isGeraden() {
-		return this.geraden;
-	}
-
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof HintLetter)) return false;
+        HintLetter letter = (HintLetter) obj;
+        return this.getLetter() == letter.getLetter();
+    }
 }

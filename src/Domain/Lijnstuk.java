@@ -1,94 +1,52 @@
 package domain;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
-public class LijnStuk extends Vorm implements Drawable {
-	private Punt StartPunt;
-	private Punt EindPunt;
+public class LijnStuk extends Vorm{
 
-	public LijnStuk(Punt startPunt, Punt eindPunt) {
-		if (startPunt == null || eindPunt == null) {
-			throw new DomainException("Startpunt en eindpunt mogen niet null zijn.");
-		}
-		setStartEnEindPunt(startPunt, eindPunt);
+	
+	private Punt startpunt;
+	private Punt eindpunt;
+	
+	public LijnStuk(Punt startpunt, Punt eindpunt) {
+		if(startpunt == null || eindpunt == null) throw new DomainException("Start of eindpunt is null");
+		this.startpunt = startpunt;
+		this.eindpunt = eindpunt;
 	}
 
 	public Punt getStartPunt() {
-		return StartPunt;
+		return this.startpunt;
 	}
 
 	public Punt getEindPunt() {
-		return EindPunt;
-	}
-
-	public void setStartEnEindPunt(Punt startPunt, Punt eindPunt) {
-		this.StartPunt = startPunt;
-		this.EindPunt = eindPunt;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		if (object == null) {
-			return false;
-		}
-		if(!(object instanceof LijnStuk)){
-			return false;
-		}
-		LijnStuk lijnstuk = (LijnStuk) object;
-		if(lijnstuk.getStartPunt().equals(this.getStartPunt())
-				&& lijnstuk.getEindPunt().equals(this.getEindPunt())) {
-			return true;
-		}
-		if(lijnstuk.getStartPunt().equals(this.getEindPunt())
-				&& lijnstuk.getEindPunt().equals(this.getStartPunt())) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public String toString() {
-		return "Lijn: startpunt: " + getStartPunt().toString() + " - eindpunt: " + getEindPunt().toString() + " - " + getOmhullende().toString() ;
-	}
-
-	@Override
-	public Omhullende getOmhullende() {
-		int hoogte;
-		int minY;
-		int breedte;
-		int minX;
-		
-		if (getStartPunt().getY() == getEindPunt().getY() && getStartPunt().getX() == getEindPunt().getX()) {
-			return null;
-		}
-		
-		if (getStartPunt().getY() < getEindPunt().getY()) {
-			minY = getStartPunt().getY();
-			hoogte = getEindPunt().getY() - getStartPunt().getY();
-		} else {
-			minY = getEindPunt().getY();
-			hoogte = getStartPunt().getY() - getEindPunt().getY();
-		}
-		
-		if (getStartPunt().getX() < getEindPunt().getX()) {
-			minX = getStartPunt().getX();
-			breedte = getEindPunt().getX() - getStartPunt().getX();
-		} else {
-			minX = getEindPunt().getX();
-			breedte = getStartPunt().getX() - getEindPunt().getX();
-		}
-
-		Omhullende omhullende = new Omhullende(new Punt(minX, minY), breedte, hoogte);
-		return omhullende;
+		return this.eindpunt;
 	}
 	
 	@Override
-	public void teken(Graphics graphics) {
-		
-		graphics.drawLine(this.getStartPunt().getX(), this.getStartPunt().getY(), this.getEindPunt().getX(), this.getEindPunt().getY());
-		
+	public boolean equals(Object obj) {
+		if(!(obj instanceof LijnStuk)) return false;
+		LijnStuk lijsntuk = (LijnStuk) obj;
+		if(this.startpunt.equals(lijsntuk.startpunt) && this.eindpunt.equals(lijsntuk.eindpunt)) return true;
+		return false;
+	}
+
+    @Override
+    public Omhullende getOmhullende() {
+        int xmin = Math.min(getStartPunt().getX(), getEindPunt().getX());
+        int ymin = Math.min(getStartPunt().getY(), getEindPunt().getY());
+        int xmax = Math.max(getStartPunt().getX(), getEindPunt().getX());
+        int ymax = Math.max(getStartPunt().getY(), getEindPunt().getY());
+        return new Omhullende(new Punt(xmin, ymin), xmax-xmin, ymax-ymin);
+    }
+
+	public void teken(Graphics graphics){
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setStroke(new BasicStroke(5));
+        graphics.drawLine(getStartPunt().getX(), getStartPunt().getY(), getEindPunt().getX(), getEindPunt().getY());
+	}
+	@Override
+	public String toString() {
+		return "LijnStuk:" + startpunt + ", " + eindpunt;
 	}
 
 
